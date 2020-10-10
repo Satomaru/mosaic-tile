@@ -1,5 +1,5 @@
 :root {
-  --box-size: 8;
+  --box-size: 9;
   --cell-size: 36px;
   --paragraph-margin: 16px;
   --text-size: 16px;
@@ -53,6 +53,12 @@ hr {
   border-right: 1px solid #ddd;
 }
 
+ul {
+  margin: 0;
+  padding-left: 1em;
+  list-style-position: inside;
+}
+
 /**************************************/
 
 .cell {
@@ -82,7 +88,7 @@ hr {
 
 .cell.color2 {
   background-color: #cfc;
-  color: #0a0;
+  color: #080;
 }
 
 .cell.color3 {
@@ -93,6 +99,11 @@ hr {
 .cell.color4 {
   background-color: #ccc;
   color: #000;
+}
+
+.cell.color5 {
+  background-color: #cef;
+  color: #068;
 }
 
 /**************************************/

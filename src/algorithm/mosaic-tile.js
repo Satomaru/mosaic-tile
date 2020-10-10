@@ -1,3 +1,4 @@
+import constant from './constant.json';
 import { Wall } from './wall';
 import { Stock } from './stock';
 import { utils } from '../utils';
@@ -20,26 +21,25 @@ export class MosaicTile {
     return this.stock.remain;
   }
 
-  get score() {
-    return 0;
-  }
-
   constructor() {
     this.wall = new Wall();
     this.stock = new Stock();
+    this.score = 0;
   }
 
   putTile(x, y) {
     if (this.stock.isEmpty()) {
-      return false;
+      return null;
     }
 
-    if (!this.isPuttable(x, y)) {
-      return false;
+    const verified = this.verifyTile(x, y);
+
+    if (!verified) {
+      return null;
     }
 
     this.wall.setTile(x, y, this.stock.draw());
-    return true;
+    return this.createResult(verified);
   }
 
   isGameOver() {
@@ -49,7 +49,7 @@ export class MosaicTile {
 
     for (let y = 0; y < Wall.HEIGHT; y++) {
       for (let x = 0; x < Wall.WIDTH; x++) {
-        if (this.isPuttable(x, y)) {
+        if (this.verifyTile(x, y)) {
           return false;
         }
       }
@@ -58,9 +58,9 @@ export class MosaicTile {
     return true;
   }
 
-  isPuttable(x, y) {
+  verifyTile(x, y) {
     if (this.wall.isThere(x, y)) {
-      return false;
+      return null;
     }
 
     let linkables = 0;
@@ -82,14 +82,37 @@ export class MosaicTile {
       || !testLink(this.wall.getBelow(x, y))
       || !testLink(this.wall.getLeft(x, y))) {
 
-      return false;
+      return null;
     }
 
     if (linkables === 0 && !Wall.isCorner(x, y)) {
-      return false;
+      return null;
     }
 
-    return true;
+    return { link: linkables };
+  }
+
+  createResult(verified) {
+    const arts = [];
+
+    if (verified.link) {
+      const names = ['single', 'double', 'triple', 'cross'];
+      const name = names[verified.link - 1];
+      const score = constant.score[name];
+
+      arts.push(name + ' +' + score);
+      this.score += score;
+    }
+
+    if (this.stock.isEmpty()) {
+      this.score += constant.score.all;
+      arts.push('all +' + constant.score.all);
+    }
+
+    return {
+      score: this.score,
+      arts: arts
+    };
   }
 
   getTile(x, y) {

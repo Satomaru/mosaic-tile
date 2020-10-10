@@ -1,6 +1,6 @@
 import React from 'react';
 import { JsxHelper } from './jsx-helper.jsx';
-import { SuitSpade, SuitHeart, SuitDiamond, SuitClub, Sun } from './icons.jsx';
+import { SuitSpade, SuitHeart, SuitDiamond, SuitClub, Sun, Moon } from './icons.jsx';
 
 function getIcon(mark) {
   switch (mark) {
@@ -9,6 +9,7 @@ function getIcon(mark) {
     case 3: return <SuitDiamond/>;
     case 4: return <SuitClub/>;
     case 5: return <Sun/>;
+    case 6: return <Moon/>;
   }
 }
 

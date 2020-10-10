@@ -11,8 +11,13 @@ class App extends React.Component {
 
   constructor(prop) {
     super(prop);
-    this.mosaicTile = new MosaicTile();
-    this.state = this.createState();
+
+    try {
+      this.mosaicTile = new MosaicTile();
+      this.state = this.createState();
+    } catch (error) {
+      window.alert(error.message);
+    }
   }
 
   createState() {
@@ -33,24 +38,30 @@ class App extends React.Component {
         },
         status: {
           gameOver: false,
-          score: 0
+          result: null
         }
       }
     };
   }
 
   render() {
-    return (
-      <div id="app">
-        <h1>Mosaic Tile</h1>
-        <Board value={this.state.board}/>
-        <Footer/>
-      </div>
-    );
+    try {
+      return (
+        <div id="app">
+          <h1>Mosaic Tile</h1>
+          <Board value={this.state.board}/>
+          <Footer/>
+        </div>
+      );
+    } catch (error) {
+      window.alert(error.message);
+    }
   }
 
   handleClickBox(x, y) {
-    if (!this.mosaicTile.putTile(x, y)) {
+    const result = this.mosaicTile.putTile(x, y);
+
+    if (!result) {
       return;
     }
 
@@ -58,7 +69,7 @@ class App extends React.Component {
     state.board.box.cells[y][x].tile = this.mosaicTile.getTile(x, y);
     state.board.stock.remain = this.mosaicTile.remain;
     state.board.status.gameOver = this.mosaicTile.isGameOver();
-    state.board.status.score = this.mosaicTile.score;
+    state.board.status.result = result;
 
     this.mosaicTile.peekStock().forEach((tile, index) => {
       state.board.stock.cells[index].tile = tile;

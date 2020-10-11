@@ -3,30 +3,22 @@ import { utils } from '../utils';
 
 export class Wall {
 
-  static get WIDTH() {
-    return constant.wall.width;
-  }
-
-  static get HEIGHT() {
-    return constant.wall.height;
-  }
-
   static isInBox(x, y) {
     return (
-      (x >= 0 && x < Wall.WIDTH) &&
-      (y >= 0 && y < Wall.HEIGHT)
+      (x >= 0 && x < constant.wall.width) &&
+      (y >= 0 && y < constant.wall.height)
     );
   }
 
   static isCorner(x, y) {
     return (
-      (x === 0 || x === Wall.WIDTH - 1) &&
-      (y === 0 || y === Wall.HEIGHT - 1)
+      (x === 0 || x === constant.wall.width - 1) &&
+      (y === 0 || y === constant.wall.height - 1)
     );
   }
 
   constructor() {
-    this.value = utils.rect(Wall.WIDTH, Wall.HEIGHT).make(null);
+    this.value = utils.rect(constant.wall.width, constant.wall.height).make(null);
   }
 
   setTile(x, y, tile) {

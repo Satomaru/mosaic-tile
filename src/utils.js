@@ -1,5 +1,14 @@
 export const utils = {
 
+  alertWhenError: (callback) => {
+    try {
+      return callback();
+    } catch (error) {
+      window.alert(error.message || error);
+      throw error;
+    }
+  },
+
   array: (target) => ({
     forEach2d: (callback) => target.forEach((row, y) =>
       row.forEach((cell, x) => callback(x, y, cell))

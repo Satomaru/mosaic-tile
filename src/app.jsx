@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as deepcopy from 'deepcopy';
 import { utils } from './utils';
+import constant from './algorithm/constant.json';
 import { MosaicTile } from './algorithm/mosaic-tile';
 import { Board } from './component/board.jsx';
 import { Footer } from './component/footer.jsx';
@@ -12,19 +13,17 @@ class App extends React.Component {
   constructor(prop) {
     super(prop);
 
-    try {
+    utils.alertWhenError(() => {
       this.mosaicTile = new MosaicTile();
       this.state = this.createState();
-    } catch (error) {
-      window.alert(error.message);
-    }
+    });
   }
 
   createState() {
     return {
       board: {
         box: {
-          cells: utils.rect(MosaicTile.WIDTH, MosaicTile.HEIGHT).make((x, y) => ({
+          cells: utils.rect(constant.wall.width, constant.wall.height).make((x, y) => ({
             className: MosaicTile.isCorner(x, y) ? 'corner' : null,
             tile: this.mosaicTile.getTile(x, y),
             onClick: () => this.handleClickBox(x, y),
@@ -40,22 +39,21 @@ class App extends React.Component {
           gameOver: false,
           result: null
         }
+      },
+      footer: {
+        constant: constant
       }
     };
   }
 
   render() {
-    try {
-      return (
-        <div id="app">
-          <h1>Mosaic Tile</h1>
-          <Board value={this.state.board}/>
-          <Footer/>
-        </div>
-      );
-    } catch (error) {
-      window.alert(error.message);
-    }
+    return utils.alertWhenError(() => (
+      <div id="app">
+        <h1>Mosaic Tile</h1>
+        <Board value={this.state.board}/>
+        <Footer value={this.state.footer}/>
+      </div>
+    ));
   }
 
   handleClickBox(x, y) {

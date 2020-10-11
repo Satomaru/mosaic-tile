@@ -5,20 +5,12 @@ import { utils } from '../utils';
 
 export class MosaicTile {
 
-  static get WIDTH() {
-    return Wall.WIDTH;
-  }
-
-  static get HEIGHT() {
-    return Wall.HEIGHT;
+  get remain() {
+    return this.stock.remain;
   }
 
   static isCorner(x, y) {
     return Wall.isCorner(x, y);
-  }
-
-  get remain() {
-    return this.stock.remain;
   }
 
   constructor() {
@@ -47,8 +39,8 @@ export class MosaicTile {
       return true;
     }
 
-    for (let y = 0; y < Wall.HEIGHT; y++) {
-      for (let x = 0; x < Wall.WIDTH; x++) {
+    for (let y = 0; y < constant.wall.height; y++) {
+      for (let x = 0; x < constant.wall.width; x++) {
         if (this.verifyTile(x, y)) {
           return false;
         }

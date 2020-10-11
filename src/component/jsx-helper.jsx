@@ -1,28 +1,24 @@
+import { utils } from '../utils';
+
 export class JsxHelper {
 
   constructor(component) {
     this.component = component;
     this.props = component.props;
-    this.value = this.props.value;
+    this.value = component.props?.value;
     this.baseClasses = [];
   }
 
   runDefaultHandleClick(event) {
-    try {
+    utils.alertWhenError(() => {
       if (!this.value.disabled && this.value.onClick) {
         this.value.onClick();
       }
-    } catch (error) {
-      window.alert(error.message);
-    }
+    });
   }
 
   begin(callback) {
-    try {
-      return callback(this);
-    } catch (error) {
-      window.alert(error.message);
-    }
+    return utils.alertWhenError(() => callback(this));
   }
 
   addBaseClass(name) {

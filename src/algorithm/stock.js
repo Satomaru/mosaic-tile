@@ -2,11 +2,7 @@ import constant from './constant.json';
 import { Tile } from './tile';
 import { utils } from '../utils';
 
-const PEEK_LENGTH = constant.stock.peek;
-const TILE_COLORS = constant.stock.colors;
-const TILE_MARKS = constant.stock.marks;
-const TILE_SAME = constant.stock.same;
-const TILE_COUNT = TILE_COLORS * TILE_MARKS * TILE_SAME;
+const TILE_COUNT = constant.stock.colors * constant.stock.marks * constant.stock.same;
 
 export class Stock {
 
@@ -21,9 +17,9 @@ export class Stock {
   constructor() {
     this.value = utils.line(TILE_COUNT)
       .make(index => {
-        const group = Math.floor(index / TILE_SAME);
-        const color = Math.floor(group / TILE_MARKS) + 1;
-        const mark = (index % TILE_MARKS) + 1;
+        const same = Math.floor(index / constant.stock.same);
+        const color = Math.floor(same / constant.stock.marks) + 1;
+        const mark = (index % constant.stock.marks) + 1;
         return new Tile(color, mark);
       });
 
@@ -31,9 +27,9 @@ export class Stock {
   }
 
   peek() {
-    const result = this.value.slice(0, PEEK_LENGTH);
+    const result = this.value.slice(0, constant.stock.peek);
 
-    while (result.length < PEEK_LENGTH) {
+    while (result.length < constant.stock.peek) {
       result.push(null);
     }
 

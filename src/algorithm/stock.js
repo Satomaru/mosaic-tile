@@ -1,46 +1,46 @@
-import constant from './constant.json';
-import { Tile } from './tile';
 import { utils } from '../utils';
-
-const TILE_COUNT = constant.stock.colors * constant.stock.marks * constant.stock.same;
+import { Print } from './print';
 
 export class Stock {
 
   get remain() {
-    return this.value.length;
+    return this.prints.length;
   }
 
   get next() {
-    return (this.remain > 0) ? this.value[0] : null;
+    return (this.remain > 0) ? this.prints[0] : null;
   }
 
-  constructor() {
-    this.value = utils.line(TILE_COUNT)
+  constructor(config) {
+    this.config = config;
+    const count = config.colors * config.marks * config.same;
+
+    this.prints = utils.line(count)
       .make(index => {
-        const same = Math.floor(index / constant.stock.same);
-        const color = Math.floor(same / constant.stock.marks) + 1;
-        const mark = (index % constant.stock.marks) + 1;
-        return new Tile(color, mark);
+        const same = Math.floor(index / config.same);
+        const color = Math.floor(same / config.marks) + 1;
+        const mark = (index % config.marks) + 1;
+        return new Print(color, mark);
       });
 
-    utils.shuffle(this.value);
-  }
-
-  peek() {
-    const result = this.value.slice(0, constant.stock.peek);
-
-    while (result.length < constant.stock.peek) {
-      result.push(null);
-    }
-
-    return result;
+    utils.shuffle(this.prints);
   }
 
   draw() {
-    return this.value.shift();
+    return this.prints.shift();
   }
 
   isEmpty() {
     return this.remain === 0;
+  }
+
+  peek() {
+    const result = this.prints.slice(0, this.config.peek);
+
+    while (result.length < this.config.peek) {
+      result.push(null);
+    }
+
+    return result;
   }
 }

@@ -85,7 +85,7 @@ ul {
   vertical-align: middle;
 }
 
-.cell.corner {
+.cell.startable {
   background-color: #ff0;
 }
 
@@ -149,18 +149,18 @@ ul {
 
 /**************************************/
 
-#stock::after {
+#next::after {
   display: block;
   content: "";
   clear: both;
 }
 
-#stock .tiles {
+#next .tiles {
   width: var(--cell-size);
   float: left;
 }
 
-#stock .remain {
+#next .remain {
   box-sizing: border-box;
   height: var(--cell-size);
   padding-top: calc((var(--cell-size) - var(--text-size)) / 2);
@@ -170,6 +170,6 @@ ul {
   float: left;
 }
 
-#stock .remain span {
+#next .remain span {
   vertical-align: top;
 }

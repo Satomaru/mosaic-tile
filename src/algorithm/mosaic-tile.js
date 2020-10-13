@@ -1,7 +1,7 @@
-import constant from './constant.json';
+import { utils } from '../utils';
 import { Wall } from './wall';
 import { Stock } from './stock';
-import { utils } from '../utils';
+import { Position } from './position';
 
 export class MosaicTile {
 
@@ -9,29 +9,49 @@ export class MosaicTile {
     return this.stock.remain;
   }
 
-  static isCorner(x, y) {
-    return Wall.isCorner(x, y);
-  }
-
-  constructor() {
-    this.wall = new Wall();
-    this.stock = new Stock();
+  constructor(config) {
+    this.config = config;
+    this.wall = new Wall(config.wall);
+    this.stock = new Stock(config.stock);
     this.score = 0;
   }
 
-  putTile(x, y) {
+  putTile(position) {
     if (this.stock.isEmpty()) {
       return null;
     }
 
-    const verified = this.verifyTile(x, y);
+    const verified = this.verifyTile(position);
 
     if (!verified) {
       return null;
     }
 
-    this.wall.setTile(x, y, this.stock.draw());
+    this.wall.addPrint(position, this.stock.draw());
     return this.createResult(verified);
+  }
+
+  createResult(verified) {
+    const arts = [];
+
+    if (verified.link) {
+      const names = ['single', 'double', 'triple', 'cross'];
+      const name = names[verified.link - 1];
+      const score = this.config.score[name];
+
+      arts.push(name + ' +' + score);
+      this.score += score;
+    }
+
+    if (this.stock.isEmpty()) {
+      this.score += this.config.score.all;
+      arts.push('all +' + this.config.score.all);
+    }
+
+    return {
+      arts: arts,
+      print: verified.print
+    };
   }
 
   isGameOver() {
@@ -39,9 +59,9 @@ export class MosaicTile {
       return true;
     }
 
-    for (let y = 0; y < constant.wall.height; y++) {
-      for (let x = 0; x < constant.wall.width; x++) {
-        if (this.verifyTile(x, y)) {
+    for (let y = 0; y < this.config.wall.height; y++) {
+      for (let x = 0; x < this.config.wall.width; x++) {
+        if (this.verifyTile(new Position(x, y))) {
           return false;
         }
       }
@@ -50,16 +70,17 @@ export class MosaicTile {
     return true;
   }
 
-  verifyTile(x, y) {
-    if (this.wall.isThere(x, y)) {
+  verifyTile(position) {
+    if (this.wall.getPrint(position)) {
       return null;
     }
 
+    const print = this.stock.next;
     let linkables = 0;
 
     const testLink = (other) => {
       if (other) {
-        if (this.stock.next.isLinkableWith(other)) {
+        if (print.isLinkableWith(other)) {
           ++linkables;
         } else {
           return false;
@@ -69,49 +90,32 @@ export class MosaicTile {
       return true;
     };
 
-    if (!testLink(this.wall.getTop(x, y))
-      || !testLink(this.wall.getRight(x, y))
-      || !testLink(this.wall.getBelow(x, y))
-      || !testLink(this.wall.getLeft(x, y))) {
+    if (!testLink(this.wall.getPrint(position.offset(0, -1)))
+      || !testLink(this.wall.getPrint(position.offset(0, 1)))
+      || !testLink(this.wall.getPrint(position.offset(1, 0)))
+      || !testLink(this.wall.getPrint(position.offset(-1, 0)))) {
 
       return null;
     }
 
-    if (linkables === 0 && !Wall.isCorner(x, y)) {
+    if (linkables === 0 && !this.isStartable(position)) {
       return null;
-    }
-
-    return { link: linkables };
-  }
-
-  createResult(verified) {
-    const arts = [];
-
-    if (verified.link) {
-      const names = ['single', 'double', 'triple', 'cross'];
-      const name = names[verified.link - 1];
-      const score = constant.score[name];
-
-      arts.push(name + ' +' + score);
-      this.score += score;
-    }
-
-    if (this.stock.isEmpty()) {
-      this.score += constant.score.all;
-      arts.push('all +' + constant.score.all);
     }
 
     return {
-      score: this.score,
-      arts: arts
+      link: linkables,
+      print: print
     };
   }
 
-  getTile(x, y) {
-    return this.wall.getTile(x, y);
+  isStartable(position) {
+    return (
+      (position.x === 0 || position.x === this.config.wall.width - 1) &&
+      (position.y === 0 || position.y === this.config.wall.height - 1)
+    );
   }
 
-  peekStock() {
+  getPrints() {
     return this.stock.peek();
   }
 }

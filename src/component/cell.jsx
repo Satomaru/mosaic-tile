@@ -1,6 +1,6 @@
 import React from 'react';
 import { JsxHelper } from './jsx-helper.jsx';
-import { SuitSpade, SuitHeart, SuitDiamond, SuitClub, Sun, Moon } from './icons.jsx';
+import { SuitSpade, SuitHeart, SuitDiamond, SuitClub, Sun } from './icons.jsx';
 
 function getIcon(mark) {
   switch (mark) {
@@ -9,7 +9,6 @@ function getIcon(mark) {
     case 3: return <SuitDiamond/>;
     case 4: return <SuitClub/>;
     case 5: return <Sun/>;
-    case 6: return <Moon/>;
   }
 }
 
@@ -19,13 +18,13 @@ export class Cell extends React.Component {
     return new JsxHelper(this).begin((helper) => {
       helper.addBaseClass('cell');
 
-      if (helper.value.tile?.color) {
-        helper.addBaseClass('color' + helper.value.tile.color);
+      if (helper.value.print?.color) {
+        helper.addBaseClass('color' + helper.value.print.color);
       }
 
       return (
         <div className={helper.getClassName()} onClick={helper.getHandleClick()}>
-          {helper.value.tile?.mark && getIcon(helper.value.tile.mark)}
+          {helper.value.print?.mark && getIcon(helper.value.print.mark)}
         </div>
       );
     });

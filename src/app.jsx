@@ -2,8 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as deepcopy from 'deepcopy';
 import { utils } from './utils';
-import constant from './algorithm/constant.json';
+import config from './config.json';
 import { MosaicTile } from './algorithm/mosaic-tile';
+import { Position } from './algorithm/position';
 import { Board } from './component/board.jsx';
 import { Footer } from './component/footer.jsx';
 import './app.css';
@@ -14,7 +15,7 @@ class App extends React.Component {
     super(prop);
 
     utils.alertWhenError(() => {
-      this.mosaicTile = new MosaicTile();
+      this.mosaicTile = new MosaicTile(config);
       this.state = this.createState();
     });
   }
@@ -23,25 +24,25 @@ class App extends React.Component {
     return {
       board: {
         box: {
-          cells: utils.rect(constant.wall.width, constant.wall.height).make((x, y) => ({
-            className: MosaicTile.isCorner(x, y) ? 'corner' : null,
-            tile: this.mosaicTile.getTile(x, y),
-            onClick: () => this.handleClickBox(x, y),
+          cells: utils.rect(config.wall.width, config.wall.height).make((x, y) => ({
+            className: this.mosaicTile.isStartable(new Position(x, y)) ? 'startable' : null,
+            onClick: () => this.handleClickBox(x, y)
           }))
         },
-        stock: {
+        next: {
           remain: this.mosaicTile.remain,
-          cells: this.mosaicTile.peekStock().map(tile => ({
-            tile: tile
+          cells: this.mosaicTile.getPrints().map(print => ({
+            print: print
           }))
         },
         status: {
-          gameOver: false,
-          result: null
+          score: 0,
+          arts: [],
+          gameOver: false
         }
       },
       footer: {
-        constant: constant
+        config: config
       }
     };
   }
@@ -57,20 +58,21 @@ class App extends React.Component {
   }
 
   handleClickBox(x, y) {
-    const result = this.mosaicTile.putTile(x, y);
+    const result = this.mosaicTile.putTile(new Position(x, y));
 
     if (!result) {
       return;
     }
 
     const state = deepcopy(this. state);
-    state.board.box.cells[y][x].tile = this.mosaicTile.getTile(x, y);
-    state.board.stock.remain = this.mosaicTile.remain;
+    state.board.box.cells[y][x].print = result.print;
+    state.board.next.remain = this.mosaicTile.remain;
+    state.board.status.score = this.mosaicTile.score;
+    state.board.status.arts = result.arts;
     state.board.status.gameOver = this.mosaicTile.isGameOver();
-    state.board.status.result = result;
 
-    this.mosaicTile.peekStock().forEach((tile, index) => {
-      state.board.stock.cells[index].tile = tile;
+    this.mosaicTile.getPrints().forEach((print, index) => {
+      state.board.next.cells[index].print = print;
     });
 
     this.setState(state);

@@ -1,53 +1,24 @@
-import constant from './constant.json';
 import { utils } from '../utils';
+import { Position } from './position';
 
 export class Wall {
 
-  static isInBox(x, y) {
-    return (
-      (x >= 0 && x < constant.wall.width) &&
-      (y >= 0 && y < constant.wall.height)
-    );
+  constructor(config) {
+    this.positions = [];
+    this.prints = utils.rect(config.width, config.height).make(null);
+    this.leftTop = new Position(0, 0);
+    this.rightBottom = new Position(config.width - 1, config.height - 1);
   }
 
-  static isCorner(x, y) {
-    return (
-      (x === 0 || x === constant.wall.width - 1) &&
-      (y === 0 || y === constant.wall.height - 1)
-    );
-  }
-
-  constructor() {
-    this.value = utils.rect(constant.wall.width, constant.wall.height).make(null);
-  }
-
-  setTile(x, y, tile) {
-    if (Wall.isInBox(x, y)) {
-      this.value[y][x] = tile;
+  addPrint(position, print) {
+    if (position.isInRange(this.leftTop, this.rightBottom)) {
+      this.positions.push(position);
+      this.prints[position.y][position.x] = print;
     }
   }
 
-  getTile(x, y) {
-    return (Wall.isInBox(x, y)) ? this.value[y][x] : null;
-  }
-
-  getTop(x, y) {
-    return this.getTile(x, y - 1);
-  }
-
-  getRight(x, y) {
-    return this.getTile(x + 1, y);
-  }
-
-  getBelow(x, y) {
-    return this.getTile(x, y + 1);
-  }
-
-  getLeft(x, y) {
-    return this.getTile(x - 1, y);
-  }
-
-  isThere(x, y) {
-    return this.getTile(x, y) !== null;
+  getPrint(position) {
+    const inRange = position.isInRange(this.leftTop, this.rightBottom);
+    return inRange ? this.prints[position.y][position.x] : null;
   }
 }

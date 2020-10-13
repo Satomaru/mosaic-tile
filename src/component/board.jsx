@@ -1,7 +1,7 @@
 import React from 'react';
 import { JsxHelper } from './jsx-helper.jsx';
 import { Box } from './box.jsx';
-import { Stock } from './stock.jsx';
+import { Next } from './next.jsx';
 import { Status } from './status.jsx'
 
 export class Board extends React.Component {
@@ -11,7 +11,7 @@ export class Board extends React.Component {
       <div id="board" className={helper.getClassName()}>
         <Box value={helper.value.box}/>
         <div className="info">
-          <Stock value={helper.value.stock}/>
+          <Next value={helper.value.next}/>
           <Status value={helper.value.status}/>
         </div>
       </div>

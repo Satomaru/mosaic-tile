@@ -90,27 +90,27 @@ ul {
 }
 
 .cell.color1 {
-  background-color: #fcc;
+  background: #fcc;
   color: #f00;
 }
 
 .cell.color2 {
-  background-color: #cfc;
+  background: #cfc;
   color: #080;
 }
 
 .cell.color3 {
-  background-color: #ccf;
+  background: #ccf;
   color: #00f;
 }
 
 .cell.color4 {
-  background-color: #ccc;
+  background: #ccc;
   color: #000;
 }
 
 .cell.color5 {
-  background-color: #cef;
+  background: #cef;
   color: #068;
 }
 

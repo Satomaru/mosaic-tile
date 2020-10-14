@@ -1,4 +1,4 @@
-export class Print {
+export class Tile {
 
   constructor(color, mark) {
     this.color = color;

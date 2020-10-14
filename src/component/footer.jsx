@@ -31,6 +31,11 @@ export class Footer extends React.Component {
             タイルの色は{config.stock.colors}色、マークは{config.stock.marks}種類です。<br/>
             同じ色で同じマークのタイルは{config.stock.same}枚あります。<br/>
           </p>
+          <p>
+            マウスを使用している場合は、<br/>
+            右クリックでマスの色を変えることができます。<br/>
+            ゲーム上の意味はありませんが、攻略に役立ててください。<br/>
+          </p>
         </div>
       );
     });

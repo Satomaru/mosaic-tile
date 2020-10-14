@@ -4,7 +4,7 @@ import * as deepcopy from 'deepcopy';
 import { utils } from './utils';
 import config from './config.json';
 import { MosaicTile } from './algorithm/mosaic-tile';
-import { Position } from './algorithm/position';
+import { Position } from './utils';
 import { Board } from './component/board.jsx';
 import { Footer } from './component/footer.jsx';
 import './app.css';
@@ -26,13 +26,15 @@ class App extends React.Component {
         box: {
           cells: utils.rect(config.wall.width, config.wall.height).make((x, y) => ({
             className: this.mosaicTile.isStartable(new Position(x, y)) ? 'startable' : null,
-            onClick: () => this.handleClickBox(x, y)
+            check: 0,
+            onClick: () => this.handleClickBox(x, y),
+            onContextMenu: () => this.handleContextMenuBox(x, y)
           }))
         },
         next: {
           remain: this.mosaicTile.remain,
-          cells: this.mosaicTile.getPrints().map(print => ({
-            print: print
+          cells: this.mosaicTile.getNext().map(tile => ({
+            tile: tile
           }))
         },
         status: {
@@ -64,17 +66,24 @@ class App extends React.Component {
       return;
     }
 
-    const state = deepcopy(this. state);
-    state.board.box.cells[y][x].print = result.print;
+    const state = deepcopy(this.state);
+    state.board.box.cells[y][x].tile = result.tile;
     state.board.next.remain = this.mosaicTile.remain;
     state.board.status.score = this.mosaicTile.score;
     state.board.status.arts = result.arts;
     state.board.status.gameOver = this.mosaicTile.isGameOver();
 
-    this.mosaicTile.getPrints().forEach((print, index) => {
-      state.board.next.cells[index].print = print;
+    this.mosaicTile.getNext().forEach((tile, index) => {
+      state.board.next.cells[index].tile = tile;
     });
 
+    this.setState(state);
+  }
+
+  handleContextMenuBox(x, y) {
+    const state = deepcopy(this.state);
+    const cell = state.board.box.cells[y][x];
+    cell.check = 1 - cell.check;
     this.setState(state);
   }
 }

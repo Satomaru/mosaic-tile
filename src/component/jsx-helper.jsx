@@ -17,6 +17,16 @@ export class JsxHelper {
     });
   }
 
+  runDefaultHandleContextMenu(event) {
+    utils.alertWhenError(() => {
+      event.preventDefault();
+
+      if (!this.value.disabled && this.value.onContextMenu) {
+        this.value.onContextMenu();
+      }
+    });
+  }
+
   begin(callback) {
     return utils.alertWhenError(() => callback(this));
   }
@@ -39,5 +49,9 @@ export class JsxHelper {
 
   getHandleClick() {
     return (event) => this.component.handleClick(event);
+  }
+
+  getHandleContextMenu() {
+    return (event) => this.component.handleContextMenu(event);
   }
 }

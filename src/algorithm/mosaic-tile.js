@@ -1,7 +1,7 @@
 import { utils } from '../utils';
 import { Wall } from './wall';
 import { Stock } from './stock';
-import { Position } from './position';
+import { Position } from '../utils';
 
 export class MosaicTile {
 
@@ -27,7 +27,7 @@ export class MosaicTile {
       return null;
     }
 
-    this.wall.addPrint(position, this.stock.draw());
+    this.wall.addTile(position, this.stock.draw());
     return this.createResult(verified);
   }
 
@@ -50,7 +50,7 @@ export class MosaicTile {
 
     return {
       arts: arts,
-      print: verified.print
+      tile: verified.tile
     };
   }
 
@@ -71,16 +71,16 @@ export class MosaicTile {
   }
 
   verifyTile(position) {
-    if (this.wall.getPrint(position)) {
+    if (this.wall.getTile(position)) {
       return null;
     }
 
-    const print = this.stock.next;
+    const tile = this.stock.next;
     let linkables = 0;
 
     const testLink = (other) => {
       if (other) {
-        if (print.isLinkableWith(other)) {
+        if (tile.isLinkableWith(other)) {
           ++linkables;
         } else {
           return false;
@@ -90,10 +90,10 @@ export class MosaicTile {
       return true;
     };
 
-    if (!testLink(this.wall.getPrint(position.offset(0, -1)))
-      || !testLink(this.wall.getPrint(position.offset(0, 1)))
-      || !testLink(this.wall.getPrint(position.offset(1, 0)))
-      || !testLink(this.wall.getPrint(position.offset(-1, 0)))) {
+    if (!testLink(this.wall.getTile(position.offset(0, -1)))
+      || !testLink(this.wall.getTile(position.offset(0, 1)))
+      || !testLink(this.wall.getTile(position.offset(1, 0)))
+      || !testLink(this.wall.getTile(position.offset(-1, 0)))) {
 
       return null;
     }
@@ -104,18 +104,18 @@ export class MosaicTile {
 
     return {
       link: linkables,
-      print: print
+      tile: tile
     };
   }
 
   isStartable(position) {
-    return (
-      (position.x === 0 || position.x === this.config.wall.width - 1) &&
-      (position.y === 0 || position.y === this.config.wall.height - 1)
+    return position.handle((x, y) =>
+      (x === 0 || x === this.config.wall.width - 1) &&
+      (y === 0 || y === this.config.wall.height - 1)
     );
   }
 
-  getPrints() {
+  getNext() {
     return this.stock.peek();
   }
 }

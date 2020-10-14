@@ -86,7 +86,7 @@ ul {
 }
 
 .cell.startable {
-  background-color: #ff0;
+  background: linear-gradient(135deg, #0ff, #00f);
 }
 
 .cell.color1 {
@@ -112,6 +112,10 @@ ul {
 .cell.color5 {
   background-color: #cef;
   color: #068;
+}
+
+.cell.check1 {
+  background: linear-gradient(135deg, #ff0, #f00);
 }
 
 /**************************************/

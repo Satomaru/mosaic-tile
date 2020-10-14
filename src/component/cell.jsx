@@ -18,13 +18,19 @@ export class Cell extends React.Component {
     return new JsxHelper(this).begin((helper) => {
       helper.addBaseClass('cell');
 
-      if (helper.value.print?.color) {
-        helper.addBaseClass('color' + helper.value.print.color);
+      if (helper.value.tile?.color) {
+        helper.addBaseClass('color' + helper.value.tile.color);
+      } else if (helper.value.check) {
+        helper.addBaseClass('check' + helper.value.check);
       }
 
       return (
-        <div className={helper.getClassName()} onClick={helper.getHandleClick()}>
-          {helper.value.print?.mark && getIcon(helper.value.print.mark)}
+        <div
+          className={helper.getClassName()}
+          onClick={helper.getHandleClick()}
+          onContextMenu={helper.getHandleContextMenu()}>
+
+          {helper.value.tile?.mark && getIcon(helper.value.tile.mark)}
         </div>
       );
     });
@@ -32,5 +38,9 @@ export class Cell extends React.Component {
 
   handleClick(event) {
     new JsxHelper(this).runDefaultHandleClick(event);
+  }
+
+  handleContextMenu(event) {
+    new JsxHelper(this).runDefaultHandleContextMenu(event);
   }
 }

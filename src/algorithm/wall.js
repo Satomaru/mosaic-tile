@@ -1,24 +1,23 @@
 import { utils } from '../utils';
-import { Position } from './position';
+import { Position } from '../utils';
 
 export class Wall {
 
   constructor(config) {
     this.positions = [];
-    this.prints = utils.rect(config.width, config.height).make(null);
-    this.leftTop = new Position(0, 0);
-    this.rightBottom = new Position(config.width - 1, config.height - 1);
+    this.tiles = utils.rect(config.width, config.height).make(null);
+    this.max = new Position(config.width - 1, config.height - 1);
   }
 
-  addPrint(position, print) {
-    if (position.isInRange(this.leftTop, this.rightBottom)) {
+  addTile(position, tile) {
+    if (position.isInside(this.max)) {
       this.positions.push(position);
-      this.prints[position.y][position.x] = print;
+      position.point(this.tiles).write(tile);
     }
   }
 
-  getPrint(position) {
-    const inRange = position.isInRange(this.leftTop, this.rightBottom);
-    return inRange ? this.prints[position.y][position.x] : null;
+  getTile(position) {
+    const inRange = position.isInside(this.max);
+    return inRange ? position.point(this.tiles).read() : null;
   }
 }

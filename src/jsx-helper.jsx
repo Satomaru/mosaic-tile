@@ -1,6 +1,13 @@
-import { utils } from '../utils';
-
 export class JsxHelper {
+
+  static alertWhenError(callback) {
+    try {
+      return callback();
+    } catch (error) {
+      window.alert(error.message || error);
+      throw error;
+    }
+  }
 
   constructor(component) {
     this.component = component;
@@ -10,7 +17,7 @@ export class JsxHelper {
   }
 
   runDefaultHandleClick(event) {
-    utils.alertWhenError(() => {
+    JsxHelper.alertWhenError(() => {
       if (!this.value.disabled && this.value.onClick) {
         this.value.onClick();
       }
@@ -18,7 +25,7 @@ export class JsxHelper {
   }
 
   runDefaultHandleContextMenu(event) {
-    utils.alertWhenError(() => {
+    JsxHelper.alertWhenError(() => {
       event.preventDefault();
 
       if (!this.value.disabled && this.value.onContextMenu) {
@@ -28,7 +35,7 @@ export class JsxHelper {
   }
 
   begin(callback) {
-    return utils.alertWhenError(() => callback(this));
+    return JsxHelper.alertWhenError(() => callback(this));
   }
 
   addBaseClass(name) {

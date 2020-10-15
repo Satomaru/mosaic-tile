@@ -1,5 +1,5 @@
 import React from 'react';
-import { JsxHelper } from './jsx-helper.jsx';
+import { JsxHelper } from '../jsx-helper.jsx';
 
 export class Footer extends React.Component {
 

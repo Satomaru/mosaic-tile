@@ -1,5 +1,5 @@
 import React from 'react';
-import { JsxHelper } from './jsx-helper.jsx';
+import { JsxHelper } from '../jsx-helper.jsx';
 import { Cell } from './cell.jsx';
 
 export class Box extends React.Component {

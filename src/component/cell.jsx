@@ -1,5 +1,5 @@
 import React from 'react';
-import { JsxHelper } from './jsx-helper.jsx';
+import { JsxHelper } from '../jsx-helper.jsx';
 import { SuitSpade, SuitHeart, SuitDiamond, SuitClub, Sun } from './icons.jsx';
 
 function getIcon(mark) {

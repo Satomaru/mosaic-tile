@@ -1,5 +1,5 @@
 import React from 'react';
-import { JsxHelper } from './jsx-helper.jsx';
+import { JsxHelper } from '../jsx-helper.jsx';
 import { Box } from './box.jsx';
 import { Next } from './next.jsx';
 import { Status } from './status.jsx'

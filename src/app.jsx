@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as deepcopy from 'deepcopy';
-import { utils } from './utils';
+import { utils, Position } from './utils';
+import { JsxHelper } from './jsx-helper.jsx';
 import config from './config.json';
 import { MosaicTile } from './algorithm/mosaic-tile';
-import { Position } from './utils';
 import { Board } from './component/board.jsx';
 import { Footer } from './component/footer.jsx';
 import './app.css';
@@ -14,7 +14,7 @@ class App extends React.Component {
   constructor(prop) {
     super(prop);
 
-    utils.alertWhenError(() => {
+    JsxHelper.alertWhenError(() => {
       this.mosaicTile = new MosaicTile(config);
       this.state = this.createState();
     });
@@ -50,7 +50,7 @@ class App extends React.Component {
   }
 
   render() {
-    return utils.alertWhenError(() => (
+    return JsxHelper.alertWhenError(() => (
       <div id="app">
         <h1>Mosaic Tile</h1>
         <Board value={this.state.board}/>

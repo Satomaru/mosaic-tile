@@ -1,0 +1,9 @@
+[submodule "sub-modules/play-js-react"]
+	path = sub-modules/play-js-react
+	url = git@github.com:Satomaru/play-js-react.git
+[submodule "sub-modules/play-js-react-express"]
+	path = sub-modules/play-js-react-express
+	url = git@github.com:Satomaru/play-js-react-express.git
+[submodule "sub-modules/play-js-utils"]
+	path = sub-modules/play-js-utils
+	url = git@github.com:Satomaru/play-js-utils.git

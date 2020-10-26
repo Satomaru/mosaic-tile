@@ -1,14 +1,20 @@
-import React from 'react';
-import { JsxHelper } from '../jsx-helper.jsx';
+import { React, Component } from 'play-js-react';
 import { Cell } from './cell.jsx';
 
-export class Box extends React.Component {
+export class Box extends Component {
 
-  render() {
-    return new JsxHelper(this).begin((helper) => (
-      <div id="box" className={helper.getClassName()}>
-        {helper.value.cells.flat().map(cell => <Cell value={cell}/>)}
-      </div>
-    ));
-  }
+  createView = () => (
+    <div id="box">
+      {this.props.value.cells.flat().map(cell =>
+        <Cell
+          position={cell.position}
+          startable={cell.startable}
+          color={cell.color}
+          mark={cell.mark}
+          check={cell.check}
+          onClick={this.props.onClick}
+          onContextMenu={this.props.onContextMenu}/>
+      )}
+    </div>
+  );
 }

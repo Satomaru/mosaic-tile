@@ -1,7 +1,6 @@
-import { utils } from '../utils';
+import playJsUtils from 'play-js-utils';
 import { Wall } from './wall';
 import { Stock } from './stock';
-import { Position } from '../utils';
 
 export class MosaicTile {
 
@@ -61,7 +60,7 @@ export class MosaicTile {
 
     for (let y = 0; y < this.config.wall.height; y++) {
       for (let x = 0; x < this.config.wall.width; x++) {
-        if (this.verifyTile(new Position(x, y))) {
+        if (this.verifyTile(new playJsUtils.Position(x, y))) {
           return false;
         }
       }

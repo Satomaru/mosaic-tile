@@ -1,4 +1,4 @@
-import { utils } from '../utils';
+import playJsUtils from 'play-js-utils';
 import { Tile } from './tile';
 
 export class Stock {
@@ -15,15 +15,14 @@ export class Stock {
     this.config = config;
     const count = config.colors * config.marks * config.same;
 
-    this.tiles = utils.line(count)
-      .make(index => {
-        const same = Math.floor(index / config.same);
-        const color = Math.floor(same / config.marks) + 1;
-        const mark = (index % config.marks) + 1;
-        return new Tile(color, mark);
-      });
+    this.tiles = playJsUtils.Line.make(count, (index) => {
+      const same = Math.floor(index / config.same);
+      const color = Math.floor(same / config.marks) + 1;
+      const mark = (index % config.marks) + 1;
+      return new Tile(color, mark);
+    }).array;
 
-    utils.shuffle(this.tiles);
+    playJsUtils.shuffle(this.tiles);
   }
 
   draw() {

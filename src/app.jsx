@@ -20,8 +20,8 @@ class App extends Component {
     const next = {
       remain: this.mosaicTile.remain,
       cells: this.mosaicTile.getNext().map(tile => ({
-        color: tile.color,
-        mark: tile.mark
+        color: tile?.color,
+        mark: tile?.mark
       }))
     };
 
@@ -78,16 +78,20 @@ class App extends Component {
 
       this.state = {
         box: {
-          cells: playJsUtils.Rect.make(config.wall.width, config.wall.height, (x, y) => ({
-            position: new playJsUtils.Position(x, y),
-            startable: this.mosaicTile.isStartable(new playJsUtils.Position(x, y))
-          })).array
+          cells: playJsUtils.Rect.make(config.wall.width, config.wall.height, (x, y) => {
+            const position = new playJsUtils.Position(x, y);
+
+            return {
+              position: position,
+              startable: this.mosaicTile.isStartable(position)
+            }
+          }).array
         },
         next: {
           remain: this.mosaicTile.remain,
           cells: this.mosaicTile.getNext().map(tile => ({
-            color: tile.color,
-            mark: tile.mark
+            color: tile?.color,
+            mark: tile?.mark
           }))
         },
         status: {
